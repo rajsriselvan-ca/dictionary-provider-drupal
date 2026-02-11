@@ -20,8 +20,12 @@ composer install
 # Copy settings file
 copy web\sites\default\default.settings.php web\sites\default\settings.php
 
-# Install Drupal with SQLite (no database setup needed)
-.\vendor\bin\drush site:install standard --db-url=sqlite://sites/default/files/.sqlite --account-name=admin --account-pass=admin --site-name="Dictionary API" -y
+# Install Drupal with MySQL (XAMPP setup - recommended)
+# First, create database in phpMyAdmin: CREATE DATABASE drupal_dictionary;
+.\vendor\bin\drush site:install standard --db-url=mysql://root:@localhost/drupal_dictionary --account-name=admin --account-pass=admin --site-name="Dictionary API" -y
+
+# Alternative: SQLite (no XAMPP needed)
+# .\vendor\bin\drush site:install standard --db-url=sqlite://sites/default/files/.sqlite --account-name=admin --account-pass=admin --site-name="Dictionary API" -y
 
 # Enable Dictionary module
 .\vendor\bin\drush pm:enable dictionary_import -y
@@ -31,8 +35,10 @@ copy web\sites\default\default.settings.php web\sites\default\settings.php
 ### Step 3: Start Server
 ```bash
 cd web
-php -S localhost:8080 .ht.router.php
+php -S localhost:8081 .ht.router.php
 ```
+
+**Note:** Port 8081 is used to avoid conflicts with XAMPP Apache (port 8080). You can use any available port by changing the number in the command above.
 
 ### Step 4: Import & Test
 ```bash
@@ -41,10 +47,10 @@ php -S localhost:8080 .ht.router.php
 .\drush diw world
 
 # Visit API endpoint
-# Browser: http://localhost:8080/jsonapi/node/dictionary_entry
+# Browser: http://localhost:8081/jsonapi/node/dictionary_entry
 ```
 
-**That's it!** Your API is running at `http://localhost:8080/jsonapi/node/dictionary_entry`
+**That's it!** Your API is running at `http://localhost:8081/jsonapi/node/dictionary_entry`
 
 ---
 
@@ -63,14 +69,19 @@ php -S localhost:8080 .ht.router.php
 - **Composer 2.x** - Dependency manager
 - **Drush 13.6+** - CLI tool
 - **PHPUnit 9.6** - Testing framework
-- **SQLite/MySQL/PostgreSQL** - Database
+- **MySQL** - Database (via XAMPP with phpMyAdmin)
+- **XAMPP** - Local development environment (Apache + MySQL + phpMyAdmin)
 
 ## Prerequisites
 
-1. **PHP 8.1+** with extensions: `curl`, `gd`, `json`, `mbstring`, `xml`, `pdo`
+1. **XAMPP** - [Download](https://www.apachefriends.org/download.html) (includes PHP 8.1+, MySQL, phpMyAdmin)
 2. **Composer 2.x** - [Download](https://getcomposer.org/download/)
-3. **Database**: SQLite (easiest) or MySQL/PostgreSQL
-4. **Web Server**: PHP built-in server, XAMPP, or Apache/Nginx
+3. **PHP Extensions** (included in XAMPP): `curl`, `gd`, `json`, `mbstring`, `xml`, `pdo`
+
+**Setup XAMPP:**
+- Install XAMPP and start MySQL service from XAMPP Control Panel
+- Access phpMyAdmin at `http://localhost/phpmyadmin`
+- Create database: `drupal_dictionary` (or use SQL: `CREATE DATABASE drupal_dictionary;`)
 
 **Verify installations:**
 ```bash
@@ -97,15 +108,19 @@ copy web\sites\default\default.settings.php web\sites\default\settings.php
 
 ### 3. Install Drupal
 
-**Using SQLite (recommended for local):**
+**Using MySQL (XAMPP - Recommended):**
 ```bash
-.\vendor\bin\drush site:install standard --db-url=sqlite://sites/default/files/.sqlite --account-name=admin --account-pass=admin --site-name="Dictionary API" -y
+# Step 1: Create database in phpMyAdmin (http://localhost/phpmyadmin)
+# Database name: drupal_dictionary
+# Or run SQL query: CREATE DATABASE drupal_dictionary;
+
+# Step 2: Install Drupal with MySQL connection
+.\vendor\bin\drush site:install standard --db-url=mysql://root:@localhost/drupal_dictionary --account-name=admin --account-pass=admin --site-name="Dictionary API" -y
 ```
 
-**Using MySQL (XAMPP):**
+**Alternative - Using SQLite (no XAMPP needed):**
 ```bash
-# Create database first: CREATE DATABASE drupal_dictionary;
-.\vendor\bin\drush site:install standard --db-url=mysql://root:@localhost/drupal_dictionary --account-name=admin --account-pass=admin --site-name="Dictionary API" -y
+.\vendor\bin\drush site:install standard --db-url=sqlite://sites/default/files/.sqlite --account-name=admin --account-pass=admin --site-name="Dictionary API" -y
 ```
 
 ### 4. Enable Dictionary Module
@@ -117,18 +132,49 @@ copy web\sites\default\default.settings.php web\sites\default\settings.php
 
 ## Running Locally
 
-**PHP Built-in Server (simplest):**
+**PHP Built-in Server:**
 ```bash
 cd web
-php -S localhost:8080 .ht.router.php
+php -S localhost:8081 .ht.router.php
 ```
 
+**Why Port 8081?** XAMPP Apache typically uses port 8080, so we use 8081 to avoid conflicts. You can use any available port (8082, 8083, etc.) by changing the number above.
+
 Access at:
-- Site: http://localhost:8080
-- Admin: http://localhost:8080/user/login (admin/admin)
-- API: http://localhost:8080/jsonapi/node/dictionary_entry
+- Site: http://localhost:8081
+- Admin: http://localhost:8081/user/login (admin/admin)
+- API: http://localhost:8081/jsonapi/node/dictionary_entry
+- phpMyAdmin: http://localhost/phpmyadmin (via XAMPP Apache)
 
 **Stop server:** Press `Ctrl+C`
+
+## Local Development Setup
+
+This project uses the following local setup:
+
+### Database: MySQL via XAMPP
+- **XAMPP** provides Apache, MySQL, and phpMyAdmin
+- **MySQL** database running on port 3306 (default)
+- **phpMyAdmin** accessible at `http://localhost/phpmyadmin`
+- **Database name:** `drupal_dictionary`
+
+### Web Server: PHP Built-in Server
+- **Port 8081** used to avoid conflict with XAMPP Apache (port 8080)
+- Drupal site accessible at `http://localhost:8081`
+- API endpoints at `http://localhost:8081/jsonapi/node/dictionary_entry`
+
+### Architecture
+```
+XAMPP (Port 80/3306)          PHP Server (Port 8081)
+├── Apache (80)               ├── Drupal 10
+├── MySQL (3306)         ←────┤ Database Connection
+└── phpMyAdmin (/phpmyadmin)  └── JSON:API Endpoints
+```
+
+**Why this setup?**
+- XAMPP provides robust MySQL database with phpMyAdmin GUI
+- PHP built-in server (port 8081) serves Drupal without Apache conflicts
+- Easy database management through phpMyAdmin interface
 
 ## Usage
 
@@ -190,45 +236,45 @@ cd E:\my_drupal_site
 
 ## API Endpoints
 
-Base URL: `http://localhost:8080`
+Base URL: `http://localhost:8081`
 
 ### Get All Entries
 
 ```bash
 # Browser
-http://localhost:8080/jsonapi/node/dictionary_entry
+http://localhost:8081/jsonapi/node/dictionary_entry
 
 # curl
-curl http://localhost:8080/jsonapi/node/dictionary_entry
+curl http://localhost:8081/jsonapi/node/dictionary_entry
 
 # PowerShell
-Invoke-RestMethod -Uri "http://localhost:8080/jsonapi/node/dictionary_entry"
+Invoke-RestMethod -Uri "http://localhost:8081/jsonapi/node/dictionary_entry"
 ```
 
 ### Filter by Word
 
 ```bash
-http://localhost:8080/jsonapi/node/dictionary_entry?filter[field_word]=hello
+http://localhost:8081/jsonapi/node/dictionary_entry?filter[field_word]=hello
 ```
 
 ### Pagination
 
 ```bash
 # First 10
-http://localhost:8080/jsonapi/node/dictionary_entry?page[limit]=10&page[offset]=0
+http://localhost:8081/jsonapi/node/dictionary_entry?page[limit]=10&page[offset]=0
 
 # Next 10
-http://localhost:8080/jsonapi/node/dictionary_entry?page[limit]=10&page[offset]=10
+http://localhost:8081/jsonapi/node/dictionary_entry?page[limit]=10&page[offset]=10
 ```
 
 ### Sort
 
 ```bash
 # Alphabetically
-http://localhost:8080/jsonapi/node/dictionary_entry?sort=field_word
+http://localhost:8081/jsonapi/node/dictionary_entry?sort=field_word
 
 # Newest first
-http://localhost:8080/jsonapi/node/dictionary_entry?sort=-created
+http://localhost:8081/jsonapi/node/dictionary_entry?sort=-created
 ```
 
 ### Response Example
@@ -338,9 +384,17 @@ php -d memory_limit=512M vendor/bin/drush
 
 ### MySQL access denied (XAMPP)
 ```bash
-# Use empty password for XAMPP default
+# Use empty password for XAMPP default (root user, no password)
 --db-url=mysql://root:@localhost/drupal_dictionary
+
+# If you set a password in phpMyAdmin, use:
+--db-url=mysql://root:your_password@localhost/drupal_dictionary
 ```
+
+### XAMPP MySQL not starting
+1. Check if another MySQL service is running (Task Manager)
+2. Change MySQL port in XAMPP Config → my.ini
+3. Restart XAMPP MySQL service
 
 ### SSL certificate error
 For local dev only, edit `web/modules/custom/dictionary_import/src/Service/DictionaryImporter.php`:
@@ -351,7 +405,8 @@ For local dev only, edit `web/modules/custom/dictionary_import/src/Service/Dicti
 ### Empty API response
 1. Import a word: `.\drush diw hello`
 2. Check module enabled: `.\drush pm:list | Select-String jsonapi`
-3. Visit: http://localhost:8080/admin/content
+3. Visit: http://localhost:8081/admin/content
+4. Check database in phpMyAdmin: `http://localhost/phpmyadmin` → `drupal_dictionary` database
 
 ## Deployment
 
@@ -398,5 +453,9 @@ GPL-2.0-or-later
 .\drush diw <word>           # Import/update word
 .\drush cr                   # Clear cache
 .\vendor\bin\phpunit --configuration=web\modules\custom\dictionary_import\phpunit.xml  # Run tests
-cd web && php -S localhost:8080 .ht.router.php    # Start server
+cd web && php -S localhost:8081 .ht.router.php    # Start server (port 8081)
+
+# XAMPP
+http://localhost/phpmyadmin  # Access phpMyAdmin
+# Database: drupal_dictionary
 ```
