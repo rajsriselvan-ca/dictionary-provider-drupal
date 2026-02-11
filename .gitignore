@@ -1,0 +1,147 @@
+# Ignore Composer dependencies
+/vendor/
+
+# Ignore Drupal core
+/web/core/
+
+# Ignore contributed modules, themes, profiles
+/web/modules/contrib/
+/web/themes/contrib/
+/web/profiles/contrib/
+/web/libraries/
+
+# Ignore Drupal generated files and directories
+/web/sites/*/files/
+/web/sites/*/private/
+/web/sites/*/translations/
+/web/sites/*/tmp/
+/web/sites/simpletest/
+
+# Ignore sensitive configuration files
+/web/sites/*/settings.php
+/web/sites/*/settings.local.php
+/web/sites/*/services.yml
+/web/sites/*/services.local.yml
+
+# Keep default configuration templates
+!/web/sites/default/default.settings.php
+!/web/sites/default/default.services.yml
+
+# Ignore database files
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.sql
+*.sql.gz
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore PHPUnit and test cache
+.phpunit.result.cache
+/web/modules/custom/*/.phpunit.result.cache
+/vendor/bin/.phpunit.result.cache
+phpunit.xml.dist
+
+# Ignore code coverage reports
+/coverage/
+/clover.xml
+/.phpunit.cache/
+
+# Ignore Drush generated files
+/drush/sites/
+/drush/contrib/
+
+# Ignore IDE and editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.project
+.buildpath
+.settings/
+
+# Ignore OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Ignore Node.js dependencies and build files
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/build/
+/dist/
+
+# Ignore frontend build artifacts
+/web/sites/*/files/css/
+/web/sites/*/files/js/
+/web/sites/*/files/php/
+
+# Ignore Composer files
+composer.phar
+/vendor-bin/
+
+# Ignore backup and temporary files
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+*.temp
+*~
+.~lock.*
+
+# Ignore log files
+*.log
+/logs/
+error_log
+php_errors.log
+
+# Ignore patches directory (uncomment if you don't want to track patches)
+# /patches/
+
+# Ignore configuration export directory (uncomment if not using config sync)
+# /config/
+
+# Ignore private files
+/private/
+
+# Ignore Drupal development files
+/.csslintrc
+/.eslintignore
+/.eslintrc.json
+/.ht.router.php
+/.editorconfig.dist
+
+# Ignore Behat and testing
+/behat.yml
+/tests/behat/local.yml
+
+# Ignore compiled files
+*.css.map
+*.js.map
+
+# Ignore cache directories
+/cache/
+/tmp/
+/.cache/
+
+# Ignore package manager lock files (uncomment if needed)
+# package-lock.json
+# yarn.lock
+
+# Ignore deployment and CI files
+/.gitlab-ci.yml.local
+/.github/workflows/local.yml

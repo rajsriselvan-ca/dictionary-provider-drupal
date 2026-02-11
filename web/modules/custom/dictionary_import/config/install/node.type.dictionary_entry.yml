@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+name: 'Dictionary Entry'
+type: dictionary_entry
+description: 'Stores a single dictionary word and its definitions.'
+help: ''
+new_revision: false
+preview_mode: 0
+display_submitted: false

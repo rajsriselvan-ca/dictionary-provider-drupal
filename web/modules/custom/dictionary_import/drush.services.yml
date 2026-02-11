@@ -1,0 +1,6 @@
+services:
+  dictionary_import.commands:
+    class: Drupal\dictionary_import\Commands\DictionaryImportCommands
+    arguments: ['@dictionary_import.importer']
+    tags:
+      - { name: drush.command }

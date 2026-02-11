@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.dictionary_entry.field_definitions
+    - field.field.node.dictionary_entry.field_word
+    - node.type.dictionary_entry
+  module:
+    - text
+    - user
+id: node.dictionary_entry.default
+targetEntityType: node
+bundle: dictionary_entry
+mode: default
+content:
+  field_word:
+    type: string
+    label: above
+    weight: 0
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_definitions:
+    type: text_default
+    label: above
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  links:
+    region: content
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

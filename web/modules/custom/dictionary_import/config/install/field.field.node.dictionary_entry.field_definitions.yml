@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+  config:
+    - node.type.dictionary_entry
+    - field.storage.node.field_definitions
+id: node.dictionary_entry.field_definitions
+field_name: field_definitions
+entity_type: node
+bundle: dictionary_entry
+label: 'Definitions'
+description: 'Collected definitions for this word imported from the external API.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: text_long
